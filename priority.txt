@@ -1,0 +1,54 @@
+#include<stdio.h>
+int main()
+{
+     int pid[10],i,j,n,bt[10],compt[10],wt[10],tat[10],temp1,temp2,temp3,p[10];
+     float sumwt=0.0,sumtat=0.0;
+     printf("ENTER NUMBER OF PROCESSES : ");
+     scanf("%d",&n);
+     printf("ENTER PROCESS ID : ");
+     for(i=0;i<n;i++)
+      scanf("%d",&pid[i]);
+     printf("ENTER BURST TIME OF %d PROCESS\n",n);
+     for(i=0;i<n;i++)
+      scanf("%d",&bt[i]);
+    printf("ENTER PRIORITY");
+    for(i=0;i<n;i++)
+     scanf("%d",&p[i]);
+    for(i=0;i<n;i++)
+    for(j=i+1;j<n;j++)
+    if(p[i]>p[j])
+    {
+        temp1=bt[i];
+        bt[i]=bt[j];
+        bt[j]=temp1;
+        temp2=p[i];
+        p[i]=p[j];
+        p[j]=temp2;
+        temp3=pid[i];
+        pid[i]=pid[j];
+        pid[j]=temp3;
+
+    }
+    printf("Process ID   Burst Time  Priority     Turnaround Time     Waiting Time\n");
+    compt[0]=bt[0];wt[0]=0;
+    for(i=1;i<n;i++)
+    compt[i]=bt[i]+compt[i-1];
+    for(i=0;i<n;i++)
+    {   
+        printf("%d\t\t", pid[i]);
+        printf("%d\t\t", bt[i]);
+        printf("%d\t\t", p[i]);
+        tat[i]=compt[i];
+        printf("%d\t\t", tat[i]);
+        wt[i]=tat[i]-bt[i];
+        printf("%d\t\t", wt[i]);
+        sumtat+=tat[i];
+        sumwt+=wt[i];
+        printf("\n");
+    }
+    printf("TOTAL WAITING TIME:%f\n",sumwt);
+    printf("AVERAGE WAITING TIME:%f\n",sumwt/n);
+    printf("TURN AROUND TIME:%f\n",sumtat);
+    printf("AVERAGE TURNAROUND TIME:%f\n",sumtat/n);
+}
+

@@ -1,0 +1,69 @@
+Round Robin
+
+Mon 3 Jul 2023
+
+#include <stdio.h>
+
+#define MAX_SIZE 20
+
+int main()
+{
+    int bt[MAX_SIZE], p[MAX_SIZE], wt[MAX_SIZE], tat[MAX_SIZE], remaining_time[MAX_SIZE];
+    int n, quantum, total_wt = 0, total_tat = 0;
+
+    printf("Enter the number of processes: ");
+    scanf("%d", &n);
+
+    printf("Enter Burst Time for each process:\n");
+    for (int i = 0; i < n; i++)
+    {
+        printf("P%d: ", i + 1);
+        scanf("%d", &bt[i]);
+        remaining_time[i] = bt[i];
+        p[i] = i + 1;
+    }
+
+    printf("Enter the time quantum: ");
+    scanf("%d", &quantum);
+
+    int completed = 0, current_time = 0;
+
+    while (completed < n)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            if (remaining_time[i] > 0)
+            {
+                if (remaining_time[i] <= quantum)
+                {
+                    current_time += remaining_time[i];
+                    remaining_time[i] = 0;
+                    wt[i] = current_time - bt[i];
+                    tat[i] = current_time;
+                    completed++;
+                }
+                else
+                {
+                    current_time += quantum;
+                    remaining_time[i] -= quantum;
+                }
+            }
+        }
+    }
+
+    printf("\nProcess\tBurst Time\tWaiting Time\tTurnaround Time\n");
+    for (int i = 0; i < n; i++)
+    {
+        total_wt += wt[i];
+        total_tat += tat[i];
+        printf("P%d\t%d\t\t%d\t\t%d\n", p[i], bt[i], wt[i], tat[i]);
+    }
+
+    float avg_wt = (float)total_wt / n;
+    float avg_tat = (float)total_tat / n;
+
+    printf("\nAverage Waiting Time: %.2f\n", avg_wt);
+    printf("Average Turnaround Time: %.2f\n", avg_tat);
+
+    return 0;
+}
